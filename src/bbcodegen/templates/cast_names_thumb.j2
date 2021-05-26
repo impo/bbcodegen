@@ -10,7 +10,7 @@ Director:
 Directors:
 {%- endif %}
  {{ movie_directors|join(', ', attribute='name') }}[/size]
-[img]{{ cover_url }}[/img][/center]
+[thumb=500]{{ cover_url }}[/thumb][/center]
 
 [size=3][b]Plot: [/b][/size]
 {{ movie_info['overview'] }}
@@ -38,7 +38,7 @@ Directors:
 [center][size=3][b]Screenshots:[/b][/size]
 {% if local_video_data['screenshots'] is defined %}
 {% for screenshot in local_video_data['screenshots'] %}
-[img]{{ screenshot }}[/img]
+[thumb=300]{{ screenshot }}[/thumb]
 {%- endfor %}
 {% endif %}
 [/center]
