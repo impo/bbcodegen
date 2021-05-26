@@ -1,0 +1,11 @@
+{% if local_video_data['mediainfo'] is defined %}
+[mediainfo]{{ local_video_data['mediainfo'] }}[/mediainfo]
+{% endif %}
+
+{% if local_video_data['screenshots'] is defined %}
+[hide=Screenshots]
+{% for screenshot in local_video_data['screenshots'] %}
+[img]{{ screenshot }}[/img]
+{%- endfor %}
+[/hide]
+{% endif %}

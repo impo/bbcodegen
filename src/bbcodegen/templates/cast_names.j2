@@ -1,0 +1,44 @@
+[center][size=4]{{ movie_info['original_title'] }}
+{%- if movie_info['title'] is defined and movie_info['title'] != movie_info['original_title'] %}
+ (AKA: {{ movie_info['title'] }})
+{%- endif %}
+ ({{ movie_year }})[/size]
+[size=3]
+{%- if (movie_directors|length) == 1 %}
+Director:
+{%- else %}
+Directors:
+{%- endif %}
+ {{ movie_directors|join(', ', attribute='name') }}[/size]
+[thumb=500]{{ cover_url }}[/thumb][/center]
+
+[size=3][b]Plot: [/b][/size]
+{{ movie_info['overview'] }}
+
+{% if movie_cast is defined %}
+[size=3][b]Cast: [/b][/size]
+[pre]
+{% for cast_member in movie_cast %}
+{{ '{:26} ... {}'.format(cast_member['name'], cast_member['character']) }}
+{% endfor %}
+[/pre]
+{% endif %}
+
+{% if local_video_data['mediainfo'] is defined %}
+[mediainfo]{{ local_video_data['mediainfo'] }}[/mediainfo]
+{% endif %}
+
+{%- if notes is defined %}
+[size=3][b]Notes:[/b][/size]
+{% for note in notes %}
+[*] {{ note }}
+{% endfor %}
+{% endif %}
+
+[center][size=3][b]Screenshots:[/b][/size]
+{% if local_video_data['screenshots'] is defined %}
+{% for screenshot in local_video_data['screenshots'] %}
+[thumb=300]{{ screenshot }}[/thumb]
+{%- endfor %}
+{% endif %}
+[/center]

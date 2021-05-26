@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "bbcodegen"
+version = "0.1.0"
+license = "MIT"
+readme = "README.md"
+description = "Generate templated BBCode based upon TMDB movie IDs."
+authors = ["Gavin Claugus <gavin@gclaugus.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+requests = "^2.25.0"
+pyperclip = "^1.8.1"
+Jinja2 = "^2.11.2"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.2.0"
+python-language-server = "^0.36.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+bbgen = 'bbcodegen.command_line:main'
