@@ -82,7 +82,12 @@ def main():
         movie_cast=movie_cast,
         local_video_data=local_video_data,
     )
-    pyperclip.copy(rendered)
+
+    try:
+        pyperclip.copy(rendered)
+    except pyperclip.PyperclipException: # This may pop up if we're working on a headless system
+        pass
+
     print(rendered)
 
 
