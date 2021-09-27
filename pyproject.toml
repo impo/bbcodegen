@@ -7,7 +7,7 @@ description = "Generate templated BBCode based upon TMDB movie IDs."
 authors = ["Gavin Claugus <gavin@gclaugus.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.8"
 requests = "^2.25.0"
 pyperclip = "^1.8.1"
 Jinja2 = "^2.11.2"
