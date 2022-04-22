@@ -2,7 +2,7 @@ import argparse
 import logging
 import pyperclip
 from bbcodegen.config import load_config
-from jinja2 import Environment, PackageLoader
+from jinja2 import Environment, PackageLoader, select_autoescape
 from datetime import date
 from bbcodegen.screenshot import mkScreenshots
 from bbcodegen.util import get_mediainfo
@@ -69,9 +69,8 @@ def main():
 
     # Load and render template
     env = Environment(
-        loader=PackageLoader("bbcodegen", "templates"),
-        trim_blocks=True,
-        lstrip_blocks=True,
+        loader=PackageLoader("bbcodegen"),
+        autoescape=select_autoescape()
     )
     template = env.get_template(args.template + ".j2")
     rendered = template.render(
