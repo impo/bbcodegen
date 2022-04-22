@@ -70,7 +70,9 @@ def main():
     # Load and render template
     env = Environment(
         loader=PackageLoader("bbcodegen"),
-        autoescape=select_autoescape()
+        autoescape=select_autoescape(),
+        trim_blocks=True,
+        lstrip_blocks=True
     )
     template = env.get_template(args.template + ".j2")
     rendered = template.render(
