@@ -22,8 +22,8 @@ def mkScreenshot(file, outputDir, offset):
         str(offset),
         "-i",
         file,
-        "-vf",
-        "scale='iw:trunc(iw/dar)',setsar=1/1", # Make sure we output square pixels
+        # "-vf",
+        # "scale='iw:trunc(iw/dar)',setsar=1/1", # Make sure we output square pixels
         "-frames:v",
         "1",
         path_join(outputDir, "ss" + str(offset).zfill(5) + ".png"),
