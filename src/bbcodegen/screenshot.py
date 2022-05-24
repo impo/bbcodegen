@@ -5,7 +5,7 @@ import logging
 from bbcodegen.util import absoluteFilePaths, largestFiles
 
 
-def mkScreenshot(file, outputDir, offset):
+def mkScreenshot(file, outputDir, offset, color_matrix):
     """ Make a screenshot from file in specified output dir, with the specified offset
 
     Keyword arguments:
@@ -13,6 +13,16 @@ def mkScreenshot(file, outputDir, offset):
     outputDir -- directory to write screenshot to
     offset -- how many seconds into the file to pull the screenshot from
     """
+
+    filters = ""
+    if color_matrix == 'bt709':
+        filters = "scale=\'max(sar,1)*iw\':\'max(1/sar,1)*ih\':in_h_chr_pos=0:in_v_chr_pos=128:in_color_matrix=bt709:flags=full_chroma_int+full_chroma_inp+accurate_rnd+spline"
+    elif color_matrix == 'bt601':
+        filters = "scale=\'max(sar,1)*iw\':\'max(1/sar,1)*ih\':in_h_chr_pos=0:in_v_chr_pos=128:in_color_matrix=bt601:flags=full_chroma_int+full_chroma_inp+accurate_rnd+spline"
+    elif color_matrix == 'bt2020':
+        filters = "scale=in_h_chr_pos=0:in_v_chr_pos=0:in_color_matrix=bt2020:flags=full_chroma_int+full_chroma_inp+accurate_rnd+spline"
+    else:
+        raise ValueError("Invalid color matrix input! Matrix: {}".format(color_matrix))
 
     ffmpeg_args = [
         "ffmpeg",
@@ -23,7 +33,9 @@ def mkScreenshot(file, outputDir, offset):
         "-i",
         file,
         "-vf",
-        "scale=\'iw:trunc(iw/dar)\',setsar=1/1", # Make sure we output square pixels
+        filters,
+        "-pix_fmt",
+        "rgb24",
         "-frames:v",
         "1",
         path_join(outputDir, "ss" + str(offset).zfill(5) + ".png"),
@@ -90,7 +102,7 @@ def getDurationCount(file_path, interval):
     return (duration, count)
 
 
-def mkScreenshots(file_path, interval, max_shots):
+def mkScreenshots(file_path, interval, max_shots, color_matrix):
     """ Make screenshots from file, with the specified interval between screenshots
 
     Keyword arguments:
@@ -105,7 +117,7 @@ def mkScreenshots(file_path, interval, max_shots):
     # Generate screenshots in tmpdir and remove tmpdir
     tmpdir = tempfile.TemporaryDirectory()
     for i in range(1, count + 1):
-        mkScreenshot(file_path, tmpdir.name, i * interval)
+        mkScreenshot(file_path, tmpdir.name, i * interval, color_matrix)
 
     # Get the largest screenshots limited to args.num
     screenshots = absoluteFilePaths(tmpdir.name)

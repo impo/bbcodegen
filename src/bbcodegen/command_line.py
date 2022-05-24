@@ -14,13 +14,23 @@ def get_args_bbgen():
     parser = argparse.ArgumentParser(
         description="Generate BBCode for movie based upon TMDB information and base media file."
     )
+    parser.add_argument("input", help="Input file")
+    parser.add_argument(
+        'color_matrix',
+        choices=['bt709', 'bt601', 'bt2020'],
+        help="Color matrix to pass to ffmpeg for screenshots"
+    )
     parser.add_argument(
         "tmdb_id", metavar="TMDB_ID", type=int, help="ID for movie on TMDB"
     )
     parser.add_argument(
         "template", metavar="JINJA_TEMPLATE", help="BBCode template to render"
     )
-    parser.add_argument("-i", "--input", dest="input", help="Input file")
+    parser.add_argument(
+        '--no-screenshots',
+        dest='take_screenshots',
+        action='store_false',
+    )
     parser.add_argument(
         "--interval",
         dest="interval",
@@ -29,6 +39,7 @@ def get_args_bbgen():
         default=600,
         help="Take screenshot of the video every <INTERVAL> seconds (default: 600)",
     )
+
     parser.add_argument(
         "-n",
         dest="num",
@@ -49,8 +60,8 @@ def main():
     local_video_data = {}
 
     # Take and upload screenshots (screenshot dir will cleanup at program exit)
-    if args.input:
-        (tmpdir, screenshots) = mkScreenshots(args.input, args.interval, args.num)
+    if args.input and args.take_screenshots:
+        (tmpdir, screenshots) = mkScreenshots(args.input, args.interval, args.num, args.color_matrix)
         local_video_data["screenshots"] = ptpimg_uploader.upload(config['ptpimg']['api_key'], screenshots)
         local_video_data["mediainfo"] = get_mediainfo(args.input)
 
